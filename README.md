@@ -6,9 +6,10 @@ Create virtual environment
 ```
 virtualenv -p python3.6 venv
 ```
-Activate it
+Activate it and install requirements
 ```
 . venv/bin/activate
+pip install -r requirements.txt
 ```
 Run migrations
 ```
