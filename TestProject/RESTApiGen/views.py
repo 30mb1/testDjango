@@ -1,8 +1,9 @@
 from django.apps import apps
-from rest_framework import serializers
 from rest_framework import viewsets
 from rest_framework import routers
+from .serializers import get_serializer
 
+# TODO rewrite with django-filters
 def get_queryset(self):
     # getting request params
     params = self.request.GET.dict()
@@ -25,18 +26,12 @@ def get_queryset(self):
     queryset = queryset[:limit]
     return queryset
 
-# Create your views here.
 def get_all_views():
     all_models = apps.get_models()
     all_views = []
 
     for model in all_models:
-        meta_class = type('Meta', (object,), dict(model=model, fields='__all__'))
-        serializer = type(
-            '{}Serializer'.format(model.__name__),
-            (serializers.ModelSerializer,),
-            dict(Meta=meta_class)
-        )
+        serializer = get_serializer(model)
         view = type(
             '{}View'.format(model.__name__),
             (viewsets.ModelViewSet,),
